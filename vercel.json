@@ -1,0 +1,12 @@
+{
+  "rewrites": [
+    {
+      "source": "/note/:id",
+      "destination": "/"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/"
+    }
+  ]
+}
