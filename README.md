@@ -1,142 +1,106 @@
-🔐 NoteCrypt – Secure Note Sharing Application
+# 🔒 NoteCrypt (Safe-Share)
 
-NoteCrypt is a secure note-sharing web application that allows users to create encrypted notes, generate a unique shareable link, 
-and let others access the note only with the correct password. The app ensures privacy, security, and simplicity.
+![React](https://img.shields.io/badge/frontend-React-61DAFB?logo=react&logoColor=black)
+![Node](https://img.shields.io/badge/backend-Node.js-339933?logo=nodedotjs&logoColor=white)
+![MongoDB](https://img.shields.io/badge/database-MongoDB-47A248?logo=mongodb&logoColor=white)
+![TypeScript](https://img.shields.io/badge/language-TypeScript-3178C6?logo=typescript&logoColor=white)
 
-🚀 Features
+NoteCrypt (Safe-Share) is a simple, secure, and visually appealing web application that allows users to create, share, and protect encrypted notes using passwords. Share sensitive information with confidence knowing it is protected.
 
-✅ User Authentication (Register & Login)
-✅ Secure Note Creation with Password Encryption
-✅ Unique Shareable Link Generation
-✅ Password-Protected Note Viewing
-✅ JWT-Based Authentication
-✅ Responsive & Clean UI
-✅ Profile Dashboard
-✅ Deployed on Vercel (Frontend) & Render (Backend)
+## ✨ Features
 
-🛠️ Tech Stack
-Frontend
+- **Password Protection**: Every shared note is secured with a unique password.
+- **User Authentication**: Secure login and signup system using JWT (JSON Web Tokens).
+- **Responsive Design**: Accessible and beautiful on both desktop and mobile devices.
+- **Fast & Modern**: Built with React (Vite) for a lightning-fast frontend experience.
 
-⚛️ React + TypeScript
+## 🛠️ Tech Stack
 
-⚡ Vite
+### Frontend
+- **React.js** (Bootstrapped with Vite)
+- **TypeScript**
+- **React Router** for navigation
+- **Axios** for API requests
 
-🎨 Inline CSS Styling
+### Backend
+- **Node.js** & **Express.js**
+- **TypeScript**
+- **MongoDB** with **Mongoose** (Database)
+- **bcrypt** for password hashing
+- **jsonwebtoken (JWT)** for secure authentication
 
-🌐 Deployed on Vercel
+## 🚀 Getting Started
 
-Backend
+Follow these instructions to get a copy of the project up and running on your local machine.
 
-🟢 Node.js
+### Prerequisites
 
-🚀 Express.js
+Ensure you have the following installed on your machine:
+- [Node.js](https://nodejs.org/) (v16 or higher)
+- [npm](https://www.npmjs.com/) (Node Package Manager)
+- A [MongoDB](https://www.mongodb.com/) database (Local or MongoDB Atlas)
 
-🍃 MongoDB
+### Installation & Setup
 
-🔐 JWT Authentication
+1. **Clone the repository** (if you haven't already):
+   ```bash
+   git clone <your-repository-url>
+   cd safe-share
+   ```
 
-🔑 bcrypt for Password Encryption
+2. **Setup Backend:**
+   Open a new terminal and navigate to the backend directory:
+   ```bash
+   cd backend
+   npm install
+   ```
+   Create a `.env` file in the `backend` directory with the following variables:
+   ```env
+   PORT=5000
+   MONGO_URI=your_mongodb_connection_string
+   JWT_SECRET=your_super_secret_jwt_key
+   ```
+   Start the backend server:
+   ```bash
+   npm run dev
+   ```
 
-☁️ Deployed on Render
+3. **Setup Frontend:**
+   Open another terminal and navigate to the frontend directory:
+   ```bash
+   cd frontend
+   npm install
+   ```
+   Create a `.env` file in the `frontend` directory:
+   ```env
+   VITE_API_BASE_URL=http://localhost:5000/api
+   ```
+   Start the frontend development server:
+   ```bash
+   npm run dev
+   ```
 
-🔁 How It Works
-1️⃣ Register / Login
+4. **Open the app!**
+   Navigate to the URL provided by Vite (usually `http://localhost:5173`) in your browser.
 
-Users must register and log in to access the dashboard.
+## 📁 Project Structure
 
-2️⃣ Create Secure Note
+```text
+safe-share/
+├── backend/            # Express server, MongoDB models, APIs
+│   ├── src/            # Backend source code
+│   ├── .env            # Backend environment variables
+│   └── package.json    # Backend dependencies
+└── frontend/           # React frontend application
+    ├── src/            # Frontend source code, components, pages
+    ├── .env            # Frontend environment variables
+    └── package.json    # Frontend dependencies
+```
 
-Enter Title
+## 🤝 Contributing
 
-Enter Content
+Contributions, issues, and feature requests are welcome!
 
-Enter a Password
+## 📄 License
 
-3️⃣ Generate Shareable Link
-
-Once the note is created, a unique link is generated:
-
-https://yourdomain.com/note/{noteId}
-
-4️⃣ Unlock with Password
-
-Anyone with the link must enter the correct password to view the note.
-
-📦 Project Structure
-safe-share-frontend/
-│
-├── src/
-│   ├── App.tsx
-│   ├── main.tsx
-│   └── ...
-│
-├── .env
-├── package.json
-└── README.md
-
-
-⚙️ Environment Variables
-Frontend (.env)
-VITE_API_BASE_URL=https://your-backend-url.onrender.com/api
-
-Backend (.env)
-MONGODB_URI=your_mongodb_url
-JWT_SECRET=your_secret_key
-PORT=5000
-
-🧪 API Endpoints
-Auth
-Method	Route	Description
-POST	/api/auth/register	Register user
-POST	/api/auth/login	Login user
-Profile
-
-| GET | /api/profile/me | Fetch user profile |
-
-Notes
-
-| POST | /api/notes/create | Create secure note |
-| POST | /api/notes/:id/verify | Verify & view note |
-
-🧑‍💻 Installation & Setup (Local)
-1️⃣ Clone the Repositories
-git clone https://github.com/your-username/safe-share-frontend.git
-git clone https://github.com/your-username/safe-share-backend.git
-
-2️⃣ Frontend Setup
-cd safe-share-frontend
-npm install
-npm run dev
-
-3️⃣ Backend Setup
-cd safe-share-backend
-npm install
-npm start
-
-🔐 Security Highlights
-
-🔑 Passwords are hashed using bcrypt
-
-🔐 JWT Token-based authentication
-
-🛡️ Notes cannot be accessed without password
-
-🔗 Unique link per note
-
-🌍 Live Demo
- safe-share-frontend-hgwi.vercel.app/
-
-👨‍💻 Author
-
-Madhusudan Das
-🎓 Computer Science Student
-💻 Fullstack Developer
-
-💡Improvements :
-
-  Give suggestions (write issue) if any improvement is required
-  
-
-❤️ Support
-
-If you like this project, please give it a ⭐ on GitHub!
+This project is open-source and available under the MIT License.
