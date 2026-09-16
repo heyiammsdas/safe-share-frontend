@@ -45,7 +45,7 @@ export default function App() {
   useEffect(() => {
     const path = window.location.pathname;
     const match = path.match(/^\/note\/([a-zA-Z0-9]+)$/);
-    if (match && !token) {  // Only if not already logged in (to avoid conflicts)
+    if (match && !token) {  // Only if not already logged in
       setNoteId(match[1]);
       setCurrentView("viewNote");
     }
@@ -59,8 +59,8 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4">
-      <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 sm:p-8 w-full max-w-lg">
+    <div className="min-h-screen bg-blue-950 flex flex-col items-center justify-center p-4 sm:p-8 font-sans text-white">
+      <div className="w-full max-w-3xl flex flex-col items-center">
         {currentView === "register" && (
           <Register
             onSuccess={(newToken, newUser) => {
@@ -90,7 +90,6 @@ export default function App() {
             onBack={() => {
               setCurrentView("login");
               setNoteId(null);
-              // Clean URL
               window.history.replaceState({}, '', '/');
             }}
           />
@@ -134,42 +133,39 @@ function Register({
   };
 
   return (
-    <div>
-      <h2 className="text-2xl font-semibold text-slate-800 text-center mb-6">
+    <div className="w-full max-w-md bg-blue-900/40 p-8 sm:p-10 rounded-2xl border border-blue-800/50 shadow-2xl backdrop-blur-md">
+      <h2 className="text-3xl font-medium text-white mb-8 text-center tracking-wide">
         Create Account
       </h2>
 
-      <form onSubmit={submit} className="space-y-4">
+      <form onSubmit={submit} className="space-y-5 text-left">
         <div>
-          <label className="block text-sm font-medium text-slate-700 mb-1">Name</label>
+          <label className="block text-sm font-semibold text-blue-200 mb-2">Full Name</label>
           <input
-            className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm transition-colors"
+            className="w-full bg-white text-slate-900 px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition-shadow"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            placeholder="Enter your name"
             required
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-slate-700 mb-1">Email</label>
+          <label className="block text-sm font-semibold text-blue-200 mb-2">Email Address</label>
           <input
-            className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm transition-colors"
+            className="w-full bg-white text-slate-900 px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition-shadow"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            placeholder="Enter your email"
             type="email"
             required
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-slate-700 mb-1">Password</label>
+          <label className="block text-sm font-semibold text-blue-200 mb-2">Password</label>
           <input
-            className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm transition-colors"
+            className="w-full bg-white text-slate-900 px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition-shadow"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            placeholder="Enter your password"
             type="password"
             required
           />
@@ -178,8 +174,8 @@ function Register({
         <button
           type="submit"
           disabled={loading}
-          className={`w-full py-2.5 rounded-lg text-white font-medium transition-colors ${
-            loading ? "bg-blue-400 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700"
+          className={`w-full mt-2 py-3 rounded-lg text-white font-semibold transition-colors ${
+            loading ? "bg-blue-600/50 cursor-not-allowed" : "bg-blue-500 hover:bg-blue-400"
           }`}
         >
           {loading ? "Signing up..." : "Sign up"}
@@ -187,18 +183,18 @@ function Register({
       </form>
 
       {msg && (
-        <p className={`mt-4 text-center text-sm font-medium ${msg.includes("Welcome") ? "text-emerald-600" : "text-red-600"}`}>
+        <p className={`mt-6 text-center text-sm font-semibold ${msg.includes("Welcome") ? "text-emerald-400" : "text-red-300"}`}>
           {msg}
         </p>
       )}
 
-      <div className="text-center mt-6">
+      <div className="text-center mt-8 pt-6 border-t border-blue-800/50">
         <button
           type="button"
           onClick={onSwitchToLogin}
-          className="text-sm text-blue-600 hover:text-blue-700 font-medium hover:underline transition-colors"
+          className="text-sm text-blue-300 hover:text-white transition-colors"
         >
-          Already have an account? Login
+          Already have an account? Log in
         </button>
       </div>
     </div>
@@ -238,31 +234,29 @@ function Login({
   };
 
   return (
-    <div>
-      <h2 className="text-2xl font-semibold text-slate-800 text-center mb-6">
-        Login
+    <div className="w-full max-w-md bg-blue-900/40 p-8 sm:p-10 rounded-2xl border border-blue-800/50 shadow-2xl backdrop-blur-md">
+      <h2 className="text-3xl font-medium text-white mb-8 text-center tracking-wide">
+        Safe Share
       </h2>
 
-      <form onSubmit={submit} className="space-y-4">
+      <form onSubmit={submit} className="space-y-5 text-left">
         <div>
-          <label className="block text-sm font-medium text-slate-700 mb-1">Email</label>
+          <label className="block text-sm font-semibold text-blue-200 mb-2">Email Address</label>
           <input
-            className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm transition-colors"
+            className="w-full bg-white text-slate-900 px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition-shadow"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            placeholder="Enter your email"
             type="email"
             required
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-slate-700 mb-1">Password</label>
+          <label className="block text-sm font-semibold text-blue-200 mb-2">Password</label>
           <input
-            className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm transition-colors"
+            className="w-full bg-white text-slate-900 px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition-shadow"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            placeholder="Enter your password"
             type="password"
             required
           />
@@ -271,25 +265,25 @@ function Login({
         <button
           type="submit"
           disabled={loading}
-          className={`w-full py-2.5 rounded-lg text-white font-medium transition-colors ${
-            loading ? "bg-blue-400 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700"
+          className={`w-full mt-2 py-3 rounded-lg text-white font-semibold transition-colors ${
+            loading ? "bg-blue-600/50 cursor-not-allowed" : "bg-blue-500 hover:bg-blue-400"
           }`}
         >
-          {loading ? "Logging in..." : "Login"}
+          {loading ? "Logging in..." : "Log in"}
         </button>
       </form>
 
       {msg && (
-        <p className={`mt-4 text-center text-sm font-medium ${msg.includes("Welcome") ? "text-emerald-600" : "text-red-600"}`}>
+        <p className={`mt-6 text-center text-sm font-semibold ${msg.includes("Welcome") ? "text-emerald-400" : "text-red-300"}`}>
           {msg}
         </p>
       )}
 
-      <div className="text-center mt-6">
+      <div className="text-center mt-8 pt-6 border-t border-blue-800/50">
         <button
           type="button"
           onClick={onSwitchToRegister}
-          className="text-sm text-blue-600 hover:text-blue-700 font-medium hover:underline transition-colors"
+          className="text-sm text-blue-300 hover:text-white transition-colors"
         >
           Don't have an account? Sign up
         </button>
@@ -310,11 +304,13 @@ function Dashboard({
   const [profile, setProfile] = useState<User | null>(user);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  
   // for creating note 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [notes, setNotes] = useState<any[]>([]);
   const [newNote, setNewNote] = useState({ title: "", content: "", password: "", expiresIn: "never" }); 
   const [shareLink , setShareLink] = useState<string| null>(null) ;
+  const [creating, setCreating] = useState(false);
 
   useEffect(() => {
     if (token && !profile) {
@@ -335,137 +331,131 @@ function Dashboard({
         .finally(() => setLoading(false));
     }
   }, [token, profile, onLogout]);
- // create note request
- const createNote = async () => {
-  console.log("Sending request to:", `${API_BASE_URL}/notes/create`);
-  try {
-    const data = await apiRequest("/notes/create", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify(newNote),
-    });
 
-    console.log("Create response:", data);
+  // create note request
+  const createNote = async () => {
+    if (!newNote.title || !newNote.content || !newNote.password) return;
+    
+    setCreating(true);
+    setShareLink(null);
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const id = (data as any)._id;
-    if (!id) {
-      console.error("No _id in response");
-      return;
+    try {
+      const data = await apiRequest("/notes/create", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(newNote),
+      });
+
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const id = (data as any)._id;
+      if (!id) throw new Error("Missing ID in response");
+
+      const link = `${window.location.origin}/note/${id}`;
+      setShareLink(link);
+      setNotes([...notes, data]);
+      setNewNote({ title: "", content: "", password: "", expiresIn: "never" });
+    } catch (err) {
+      console.error("Failed to create note:", err);
+      alert(err instanceof Error ? err.message : "Failed to create note");
+    } finally {
+      setCreating(false);
     }
-
-    const link = `${window.location.origin}/note/${id}`;
-    setShareLink(link);
-    console.log("Generated link:", link);
-
-    setNotes([...notes, data]);
-    setNewNote({ title: "", content: "", password: "", expiresIn: "never" });
-  } catch (err) {
-    console.error("Failed to create note:", err);
-    alert(err instanceof Error ? err.message : "Failed to create note");
-  }
-};
+  };
 
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center pb-4 border-b border-slate-200">
-        <h2 className="text-xl font-semibold text-slate-800">Dashboard</h2>
+    <div className="w-full max-w-3xl space-y-8">
+      {/* Minimal Navigation */}
+      <div className="flex justify-between items-center bg-blue-900/30 px-6 py-4 rounded-xl border border-blue-800/50 backdrop-blur-sm">
+        <div className="text-blue-100 font-medium">
+          Logged in as <span className="font-semibold text-white ml-1">{profile?.name || user?.name || "..."}</span>
+        </div>
         <button
           onClick={onLogout}
-          className="px-4 py-2 text-sm font-medium text-white bg-slate-800 hover:bg-slate-700 rounded-lg transition-colors"
+          className="text-sm text-blue-300 hover:text-white transition-colors"
         >
-          Logout
+          Sign out
         </button>
       </div>
 
-      {loading && (
-        <div className="flex flex-col items-center justify-center py-8">
-          <div className="w-10 h-10 border-4 border-slate-200 border-t-blue-600 rounded-full animate-spin"></div>
-          <p className="mt-4 text-sm text-slate-500">Loading profile...</p>
+      {(loading || error) && (
+        <div className="text-center py-4">
+          {loading && <p className="text-blue-300 text-sm">Loading...</p>}
+          {error && <p className="text-red-300 text-sm">{error}</p>}
         </div>
       )}
 
-      {error && (
-        <div className="p-4 bg-red-50 text-red-600 text-sm font-medium rounded-lg border border-red-100">
-          {error}
-        </div>
-      )}
-
-      {profile && !loading && (
-        <div className="bg-slate-50 rounded-xl p-5 border border-slate-200">
-          <h3 className="text-sm font-semibold text-slate-800 mb-3 uppercase tracking-wider">Profile Info</h3>
-          <div className="space-y-3">
-            <div>
-              <span className="block text-xs font-medium text-slate-500">Name</span>
-              <span className="text-sm text-slate-800 font-medium">{profile.name}</span>
-            </div>
-            <div>
-              <span className="block text-xs font-medium text-slate-500">Email</span>
-              <span className="text-sm text-slate-800">{profile.email}</span>
-            </div>
-          </div>
-        </div>
-      )}
-
-       <div className="bg-white rounded-xl border border-slate-200 p-5 shadow-sm mt-6">
-        <h3 className="text-lg font-medium text-slate-800 mb-4">Create Secure Note</h3>
+      {/* Main Create Note Area */}
+      <div className="bg-blue-900/40 p-6 sm:p-10 rounded-2xl border border-blue-800/50 shadow-2xl backdrop-blur-md text-left">
+        <h3 className="text-2xl font-medium text-white mb-8">Create Secure Note</h3>
         
-        <div className="space-y-4">
+        <div className="space-y-6">
           <div>
+            <label className="block text-sm font-semibold text-blue-200 mb-2">Note Title</label>
             <input
-              placeholder="Title"
               value={newNote.title}
               onChange={(e) => setNewNote({...newNote, title: e.target.value})}
-              className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm transition-colors"
+              className="w-full bg-white text-slate-900 px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition-shadow"
+              required
             />
           </div>
+
           <div>
+            <label className="block text-sm font-semibold text-blue-200 mb-2">Note Content</label>
             <textarea
-              placeholder="Content"
               value={newNote.content}
               onChange={(e) => setNewNote({...newNote, content: e.target.value})}
-              className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm min-h-[120px] resize-y transition-colors"
+              className="w-full bg-white text-slate-900 px-4 py-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition-shadow min-h-[220px] resize-y leading-relaxed"
+              required
             />
           </div>
-          <div>
-            <input
-              placeholder="Encryption Password"
-              type="password"
-              value={newNote.password}
-              onChange={(e) => setNewNote({...newNote, password: e.target.value})}
-              className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm transition-colors"
-            />
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <div>
+              <label className="block text-sm font-semibold text-blue-200 mb-2">Passkey</label>
+              <input
+                type="password"
+                value={newNote.password}
+                onChange={(e) => setNewNote({...newNote, password: e.target.value})}
+                className="w-full bg-white text-slate-900 px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition-shadow"
+                required
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-semibold text-blue-200 mb-2">Expiration</label>
+              <select
+                value={newNote.expiresIn}
+                onChange={(e) => setNewNote({...newNote, expiresIn: e.target.value})}
+                className="w-full bg-white text-slate-900 px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition-shadow"
+              >
+                <option value="10m">10 Minutes</option>
+                <option value="1h">1 Hour</option>
+                <option value="1d">1 Day</option>
+                <option value="never">Never Expires</option>
+              </select>
+            </div>
           </div>
-          <div>
-            <select
-              value={newNote.expiresIn}
-              onChange={(e) => setNewNote({...newNote, expiresIn: e.target.value})}
-              className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm transition-colors bg-white"
-            >
-              <option value="10m">Expires in 10 Minutes</option>
-              <option value="1h">Expires in 1 Hour</option>
-              <option value="1d">Expires in 1 Day</option>
-              <option value="never">Never Expires</option>
-            </select>
-          </div>
+
           <button 
             onClick={createNote}
-            className="w-full py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors text-sm"
+            disabled={creating}
+            className={`w-full mt-4 py-3.5 rounded-lg text-white font-semibold transition-colors ${
+              creating ? "bg-blue-600/50 cursor-not-allowed" : "bg-blue-500 hover:bg-blue-400"
+            }`}
           >
-            Create Secure Note
+            {creating ? "Creating..." : "Create Secure Note"}
           </button>
         </div>
 
         {shareLink && (
-          <div className="mt-6 p-4 bg-blue-50 border border-blue-100 rounded-lg">
-            <p className="text-sm font-medium text-blue-900 mb-2">Your shareable link:</p>
+          <div className="mt-8 p-6 bg-white rounded-xl border border-blue-100 text-center shadow-inner">
+            <p className="text-sm font-semibold text-slate-500 mb-2">Your shareable link is ready:</p>
             <a 
               href={shareLink} 
               target="_blank" 
               rel="noopener noreferrer"
-              className="text-sm text-blue-600 hover:text-blue-800 break-all hover:underline"
+              className="text-blue-600 hover:text-blue-800 break-all hover:underline font-semibold text-lg"
             >
               {shareLink}
             </a>
@@ -476,7 +466,6 @@ function Dashboard({
   );
 }
 
-// New Component: NoteViewer
 function NoteViewer({
   noteId,
   onBack,
@@ -510,55 +499,49 @@ function NoteViewer({
     }
   };
 
+  // State when unlocked successfully
   if (content) {
     return (
-      <div className="space-y-6">
-        <div className="text-center">
-          <h2 className="text-2xl font-semibold text-slate-800 mb-2">
-            Secure Note Unlocked
-          </h2>
-          <div className="w-12 h-1 bg-emerald-500 mx-auto rounded-full"></div>
-        </div>
-        
-        <div className="bg-slate-50 border border-slate-200 p-6 rounded-xl">
-          <h3 className="text-xl font-medium text-slate-900 mb-4 pb-4 border-b border-slate-200">
+      <div className="w-full max-w-3xl space-y-6">
+        <div className="bg-white rounded-2xl p-8 sm:p-12 shadow-2xl text-left border border-slate-100">
+          <h2 className="text-3xl font-medium text-slate-900 mb-6 pb-6 border-b border-slate-100">
             {content.title}
-          </h3>
-          <p className="whitespace-pre-wrap text-slate-700 leading-relaxed text-sm">
+          </h2>
+          <div className="whitespace-pre-wrap text-slate-800 leading-relaxed text-lg min-h-[250px]">
             {content.content}
-          </p>
+          </div>
         </div>
         
-        <button
-          onClick={onBack}
-          className="w-full py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium rounded-lg transition-colors border border-slate-300"
-        >
-          Back to Login
-        </button>
+        <div className="text-center mt-8">
+          <button
+            onClick={onBack}
+            className="text-sm text-blue-300 hover:text-white transition-colors"
+          >
+            Close Note
+          </button>
+        </div>
       </div>
     );
   }
 
+  // State when requesting passkey
   return (
-    <div>
-      <div className="text-center mb-6">
-        <h2 className="text-2xl font-semibold text-slate-800 mb-2">
-          Unlock Secure Note
-        </h2>
-        <p className="text-sm text-slate-500">
-          Enter the password to view this note
-        </p>
-      </div>
+    <div className="w-full max-w-md bg-blue-900/40 p-8 sm:p-10 rounded-2xl border border-blue-800/50 shadow-2xl backdrop-blur-md text-center">
+      <h2 className="text-2xl font-medium text-white mb-2">
+        Unlock Note
+      </h2>
+      <p className="text-sm text-blue-200 mb-8">
+        This note requires a passkey to view.
+      </p>
 
-      <form onSubmit={verifyNote} className="space-y-4">
+      <form onSubmit={verifyNote} className="space-y-5 text-left">
         <div>
-          <label className="block text-sm font-medium text-slate-700 mb-1">Password</label>
+          <label className="block text-sm font-semibold text-blue-200 mb-2">Passkey</label>
           <input
-            className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm transition-colors"
+            className="w-full bg-white text-slate-900 px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition-shadow text-center tracking-widest"
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            placeholder="Enter the password"
             required
           />
         </div>
@@ -566,27 +549,27 @@ function NoteViewer({
         <button
           type="submit"
           disabled={loading}
-          className={`w-full py-2.5 rounded-lg text-white font-medium transition-colors ${
-            loading ? "bg-blue-400 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700"
+          className={`w-full mt-2 py-3 rounded-lg text-white font-semibold transition-colors ${
+            loading ? "bg-blue-600/50 cursor-not-allowed" : "bg-blue-500 hover:bg-blue-400"
           }`}
         >
-          {loading ? "Unlocking..." : "Unlock Note"}
+          {loading ? "Unlocking..." : "Verify & Read"}
         </button>
       </form>
 
       {msg && (
-        <p className="mt-4 text-center text-sm font-medium text-red-600">
+        <p className="mt-6 text-center text-sm font-semibold text-red-300">
           {msg}
         </p>
       )}
 
-      <div className="text-center mt-6">
+      <div className="text-center mt-8 pt-6 border-t border-blue-800/50">
         <button
           type="button"
           onClick={onBack}
-          className="text-sm text-slate-500 hover:text-slate-700 font-medium hover:underline transition-colors"
+          className="text-sm text-blue-300 hover:text-white transition-colors"
         >
-          Back to Login
+          Back to Home
         </button>
       </div>
     </div>
