@@ -59,26 +59,8 @@ export default function App() {
   };
 
   return (
-    <div
-      style={{
-        minHeight: "100vh",
-        background: "linear-gradient(to bottom right, #ebf4ff, #e0e7ff)",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        padding: "16px",
-      }}
-    >
-      <div
-        style={{
-          background: "white",
-          borderRadius: "12px",
-          boxShadow: "0 4px 20px rgba(0,0,0,0.1)",
-          padding: "32px",
-          width: "100%",
-          maxWidth: "400px",
-        }}
-      >
+    <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4">
+      <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 sm:p-8 w-full max-w-lg">
         {currentView === "register" && (
           <Register
             onSuccess={(newToken, newUser) => {
@@ -151,93 +133,70 @@ function Register({
     }
   };
 
-  const inputStyle = {
-    width: "100%",
-    padding: "10px 12px",
-    border: "1px solid #ccc",
-    borderRadius: "8px",
-    outline: "none",
-    marginBottom: "12px",
-    fontSize: "14px",
-  };
-
   return (
     <div>
-      <h2 style={{ fontSize: "24px", fontWeight: "bold", color: "#1e293b", textAlign: "center", marginBottom: "20px" }}>
+      <h2 className="text-2xl font-semibold text-slate-800 text-center mb-6">
         Create Account
       </h2>
 
-      <form onSubmit={submit}>
-        <label style={{ fontSize: "14px", color: "#374151" }}>Name</label>
-        <input
-          style={inputStyle}
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          placeholder="Enter your name"
-          required
-        />
+      <form onSubmit={submit} className="space-y-4">
+        <div>
+          <label className="block text-sm font-medium text-slate-700 mb-1">Name</label>
+          <input
+            className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm transition-colors"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            placeholder="Enter your name"
+            required
+          />
+        </div>
 
-        <label style={{ fontSize: "14px", color: "#374151" }}>Email</label>
-        <input
-          style={inputStyle}
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="Enter your email"
-          type="email"
-          required
-        />
+        <div>
+          <label className="block text-sm font-medium text-slate-700 mb-1">Email</label>
+          <input
+            className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm transition-colors"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="Enter your email"
+            type="email"
+            required
+          />
+        </div>
 
-        <label style={{ fontSize: "14px", color: "#374151" }}>Password</label>
-        <input
-          style={inputStyle}
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          placeholder="Enter your password"
-          type="password"
-          required
-        />
+        <div>
+          <label className="block text-sm font-medium text-slate-700 mb-1">Password</label>
+          <input
+            className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm transition-colors"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="Enter your password"
+            type="password"
+            required
+          />
+        </div>
 
         <button
           type="submit"
           disabled={loading}
-          style={{
-            width: "100%",
-            backgroundColor: loading ? "#60a5fa" : "#2563eb",
-            color: "white",
-            padding: "10px",
-            borderRadius: "8px",
-            border: "none",
-            fontWeight: 500,
-            cursor: loading ? "not-allowed" : "pointer",
-          }}
+          className={`w-full py-2.5 rounded-lg text-white font-medium transition-colors ${
+            loading ? "bg-blue-400 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700"
+          }`}
         >
           {loading ? "Signing up..." : "Sign up"}
         </button>
       </form>
 
       {msg && (
-        <p
-          style={{
-            marginTop: "10px",
-            textAlign: "center",
-            color: msg.includes("Welcome") ? "green" : "red",
-          }}
-        >
+        <p className={`mt-4 text-center text-sm font-medium ${msg.includes("Welcome") ? "text-emerald-600" : "text-red-600"}`}>
           {msg}
         </p>
       )}
 
-      <div style={{ textAlign: "center", marginTop: "12px" }}>
+      <div className="text-center mt-6">
         <button
           type="button"
           onClick={onSwitchToLogin}
-          style={{
-            background: "none",
-            color: "#2563eb",
-            border: "none",
-            cursor: "pointer",
-            fontSize: "14px",
-          }}
+          className="text-sm text-blue-600 hover:text-blue-700 font-medium hover:underline transition-colors"
         >
           Already have an account? Login
         </button>
@@ -278,84 +237,59 @@ function Login({
     }
   };
 
-  const inputStyle = {
-    width: "100%",
-    padding: "10px 12px",
-    border: "1px solid #ccc",
-    borderRadius: "8px",
-    outline: "none",
-    marginBottom: "12px",
-    fontSize: "14px",
-  };
-
   return (
     <div>
-      <h2 style={{ fontSize: "24px", fontWeight: "bold", color: "#1e293b", textAlign: "center", marginBottom: "20px" }}>
+      <h2 className="text-2xl font-semibold text-slate-800 text-center mb-6">
         Login
       </h2>
 
-      <form onSubmit={submit}>
-        <label style={{ fontSize: "14px", color: "#374151" }}>Email</label>
-        <input
-          style={inputStyle}
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="Enter your email"
-          type="email"
-          required
-        />
+      <form onSubmit={submit} className="space-y-4">
+        <div>
+          <label className="block text-sm font-medium text-slate-700 mb-1">Email</label>
+          <input
+            className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm transition-colors"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="Enter your email"
+            type="email"
+            required
+          />
+        </div>
 
-        <label style={{ fontSize: "14px", color: "#374151" }}>Password</label>
-        <input
-          style={inputStyle}
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          placeholder="Enter your password"
-          type="password"
-          required
-        />
+        <div>
+          <label className="block text-sm font-medium text-slate-700 mb-1">Password</label>
+          <input
+            className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm transition-colors"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="Enter your password"
+            type="password"
+            required
+          />
+        </div>
 
         <button
           type="submit"
           disabled={loading}
-          style={{
-            width: "100%",
-            backgroundColor: loading ? "#60a5fa" : "#2563eb",
-            color: "white",
-            padding: "10px",
-            borderRadius: "8px",
-            border: "none",
-            fontWeight: 500,
-            cursor: loading ? "not-allowed" : "pointer",
-          }}
+          className={`w-full py-2.5 rounded-lg text-white font-medium transition-colors ${
+            loading ? "bg-blue-400 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700"
+          }`}
         >
           {loading ? "Logging in..." : "Login"}
         </button>
       </form>
 
       {msg && (
-        <p
-          style={{
-            marginTop: "10px",
-            textAlign: "center",
-            color: msg.includes("Welcome") ? "green" : "red",
-          }}
-        >
+        <p className={`mt-4 text-center text-sm font-medium ${msg.includes("Welcome") ? "text-emerald-600" : "text-red-600"}`}>
           {msg}
         </p>
       )}
 
-      <div style={{ textAlign: "center", marginTop: "12px" }}>
+      <div className="text-center mt-6">
         <button
           type="button"
           onClick={onSwitchToRegister}
-          style={{
-            background: "none",
-            color: "#2563eb",
-            border: "none",
-            cursor: "pointer",
-            fontSize: "14px",
-          }}
+          className="text-sm text-blue-600 hover:text-blue-700 font-medium hover:underline transition-colors"
         >
           Don't have an account? Sign up
         </button>
@@ -435,92 +369,94 @@ function Dashboard({
 };
 
   return (
-    <div>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-        <h2 style={{ fontSize: "24px", fontWeight: "bold", color: "#1e293b" }}>Dashboard</h2>
+    <div className="space-y-6">
+      <div className="flex justify-between items-center pb-4 border-b border-slate-200">
+        <h2 className="text-xl font-semibold text-slate-800">Dashboard</h2>
         <button
           onClick={onLogout}
-          style={{
-            backgroundColor: "#dc2626",
-            color: "white",
-            border: "none",
-            borderRadius: "8px",
-            padding: "8px 16px",
-            cursor: "pointer",
-          }}
+          className="px-4 py-2 text-sm font-medium text-white bg-slate-800 hover:bg-slate-700 rounded-lg transition-colors"
         >
           Logout
         </button>
       </div>
 
       {loading && (
-        <div style={{ textAlign: "center", marginTop: "40px" }}>
-          <div
-            style={{
-              height: "48px",
-              width: "48px",
-              border: "4px solid #93c5fd",
-              borderTop: "4px solid #2563eb",
-              borderRadius: "50%",
-              margin: "auto",
-              animation: "spin 1s linear infinite",
-            }}
-          ></div>
-          <p style={{ marginTop: "16px", color: "#6b7280" }}>Loading profile...</p>
+        <div className="flex flex-col items-center justify-center py-8">
+          <div className="w-10 h-10 border-4 border-slate-200 border-t-blue-600 rounded-full animate-spin"></div>
+          <p className="mt-4 text-sm text-slate-500">Loading profile...</p>
         </div>
       )}
 
       {error && (
-        <div style={{ background: "#fee2e2", color: "#b91c1c", padding: "12px", borderRadius: "8px", marginTop: "20px" }}>
+        <div className="p-4 bg-red-50 text-red-600 text-sm font-medium rounded-lg border border-red-100">
           {error}
         </div>
       )}
 
       {profile && !loading && (
-        <div
-          style={{
-            background: "#f9fafb",
-            borderRadius: "8px",
-            padding: "20px",
-            marginTop: "20px",
-          }}
-        >
-          <div>
-            <strong>Name:</strong>
-            <p>{profile.name}</p>
-          </div>
-          <div>
-            <strong>Email:</strong>
-            <p>{profile.email}</p>
+        <div className="bg-slate-50 rounded-xl p-5 border border-slate-200">
+          <h3 className="text-sm font-semibold text-slate-800 mb-3 uppercase tracking-wider">Profile Info</h3>
+          <div className="space-y-3">
+            <div>
+              <span className="block text-xs font-medium text-slate-500">Name</span>
+              <span className="text-sm text-slate-800 font-medium">{profile.name}</span>
+            </div>
+            <div>
+              <span className="block text-xs font-medium text-slate-500">Email</span>
+              <span className="text-sm text-slate-800">{profile.email}</span>
+            </div>
           </div>
         </div>
       )}
-       <div style={{ marginTop: "20px", padding: "20px", background: "#f8fafc", borderRadius: "8px" }}>
-        <h3>Create Secure Note</h3>
-        <input
-          placeholder="Title"
-          value={newNote.title}
-          onChange={(e) => setNewNote({...newNote, title: e.target.value})}
-          style={{ width: "100%", marginBottom: "10px", padding: "8px" }}
-        />
-        <textarea
-          placeholder="Content"
-          value={newNote.content}
-          onChange={(e) => setNewNote({...newNote, content: e.target.value})}
-          style={{ width: "100%", marginBottom: "10px", padding: "8px", minHeight: "100px" }}
-        />
-        <input
-          placeholder="Encryption Password"
-          type="password"
-          value={newNote.password}
-          onChange={(e) => setNewNote({...newNote, password: e.target.value})}
-          style={{ width: "100%", marginBottom: "10px", padding: "8px" }}
-        />
-        <button onClick={createNote}>Create Secure Note</button>
+
+       <div className="bg-white rounded-xl border border-slate-200 p-5 shadow-sm mt-6">
+        <h3 className="text-lg font-medium text-slate-800 mb-4">Create Secure Note</h3>
+        
+        <div className="space-y-4">
+          <div>
+            <input
+              placeholder="Title"
+              value={newNote.title}
+              onChange={(e) => setNewNote({...newNote, title: e.target.value})}
+              className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm transition-colors"
+            />
+          </div>
+          <div>
+            <textarea
+              placeholder="Content"
+              value={newNote.content}
+              onChange={(e) => setNewNote({...newNote, content: e.target.value})}
+              className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm min-h-[120px] resize-y transition-colors"
+            />
+          </div>
+          <div>
+            <input
+              placeholder="Encryption Password"
+              type="password"
+              value={newNote.password}
+              onChange={(e) => setNewNote({...newNote, password: e.target.value})}
+              className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm transition-colors"
+            />
+          </div>
+          <button 
+            onClick={createNote}
+            className="w-full py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors text-sm"
+          >
+            Create Secure Note
+          </button>
+        </div>
+
         {shareLink && (
-          <div style={{ marginTop: "15px", background: "#f1f5f9", padding: "10px", borderRadius: "8px" }}>
-            <p>Your shareable link:</p>
-            <a href={shareLink} target="_blank" rel="noopener noreferrer">{shareLink}</a>
+          <div className="mt-6 p-4 bg-blue-50 border border-blue-100 rounded-lg">
+            <p className="text-sm font-medium text-blue-900 mb-2">Your shareable link:</p>
+            <a 
+              href={shareLink} 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-sm text-blue-600 hover:text-blue-800 break-all hover:underline"
+            >
+              {shareLink}
+            </a>
           </div>
         )}
       </div>
@@ -562,44 +498,28 @@ function NoteViewer({
     }
   };
 
-  const inputStyle = {
-    width: "100%",
-    padding: "10px 12px",
-    border: "1px solid #ccc",
-    borderRadius: "8px",
-    outline: "none",
-    marginBottom: "12px",
-    fontSize: "14px",
-  };
-
-  const buttonStyle = {
-    width: "100%",
-    backgroundColor: loading ? "#60a5fa" : "#2563eb",
-    color: "white",
-    padding: "10px",
-    borderRadius: "8px",
-    border: "none",
-    fontWeight: 500,
-    cursor: loading ? "not-allowed" : "pointer",
-    marginBottom: "12px",
-  };
-
   if (content) {
     return (
-      <div>
-        <h2 style={{ fontSize: "24px", fontWeight: "bold", color: "#1e293b", textAlign: "center", marginBottom: "20px" }}>
-          Secure Note Unlocked
-        </h2>
-        <div style={{ background: "#f9fafb", padding: "20px", borderRadius: "8px", marginBottom: "20px" }}>
-          <h3 style={{ marginBottom: "10px", color: "#1e293b" }}>{content.title}</h3>
-          <p style={{ whiteSpace: "pre-wrap", lineHeight: "1.6" }}>{content.content}</p>
+      <div className="space-y-6">
+        <div className="text-center">
+          <h2 className="text-2xl font-semibold text-slate-800 mb-2">
+            Secure Note Unlocked
+          </h2>
+          <div className="w-12 h-1 bg-emerald-500 mx-auto rounded-full"></div>
         </div>
+        
+        <div className="bg-slate-50 border border-slate-200 p-6 rounded-xl">
+          <h3 className="text-xl font-medium text-slate-900 mb-4 pb-4 border-b border-slate-200">
+            {content.title}
+          </h3>
+          <p className="whitespace-pre-wrap text-slate-700 leading-relaxed text-sm">
+            {content.content}
+          </p>
+        </div>
+        
         <button
           onClick={onBack}
-          style={{
-            ...buttonStyle,
-            backgroundColor: "#6b7280",
-          }}
+          className="w-full py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium rounded-lg transition-colors border border-slate-300"
         >
           Back to Login
         </button>
@@ -609,56 +529,50 @@ function NoteViewer({
 
   return (
     <div>
-      <h2 style={{ fontSize: "24px", fontWeight: "bold", color: "#1e293b", textAlign: "center", marginBottom: "20px" }}>
-        Unlock Secure Note
-      </h2>
-      <p style={{ textAlign: "center", color: "#6b7280", marginBottom: "20px" }}>
-        Enter the password to view the note.
-      </p>
+      <div className="text-center mb-6">
+        <h2 className="text-2xl font-semibold text-slate-800 mb-2">
+          Unlock Secure Note
+        </h2>
+        <p className="text-sm text-slate-500">
+          Enter the password to view this note
+        </p>
+      </div>
 
-      <form onSubmit={verifyNote}>
-        <label style={{ fontSize: "14px", color: "#374151" }}>Password</label>
-        <input
-          style={inputStyle}
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          placeholder="Enter the password"
-          required
-        />
+      <form onSubmit={verifyNote} className="space-y-4">
+        <div>
+          <label className="block text-sm font-medium text-slate-700 mb-1">Password</label>
+          <input
+            className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm transition-colors"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="Enter the password"
+            required
+          />
+        </div>
 
         <button
           type="submit"
           disabled={loading}
-          style={buttonStyle}
+          className={`w-full py-2.5 rounded-lg text-white font-medium transition-colors ${
+            loading ? "bg-blue-400 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700"
+          }`}
         >
           {loading ? "Unlocking..." : "Unlock Note"}
         </button>
       </form>
 
       {msg && (
-        <p
-          style={{
-            marginTop: "10px",
-            textAlign: "center",
-            color: "red",
-          }}
-        >
+        <p className="mt-4 text-center text-sm font-medium text-red-600">
           {msg}
         </p>
       )}
 
-      <div style={{ textAlign: "center", marginTop: "12px" }}>
+      <div className="text-center mt-6">
         <button
           type="button"
           onClick={onBack}
-          style={{
-            background: "none",
-            color: "#2563eb",
-            border: "none",
-            cursor: "pointer",
-            fontSize: "14px",
-          }}
+          className="text-sm text-slate-500 hover:text-slate-700 font-medium hover:underline transition-colors"
         >
           Back to Login
         </button>
