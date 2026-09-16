@@ -313,7 +313,7 @@ function Dashboard({
   // for creating note 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [notes, setNotes] = useState<any[]>([]);
-  const [newNote, setNewNote] = useState({ title: "", content: "", password: "" }); 
+  const [newNote, setNewNote] = useState({ title: "", content: "", password: "", expiresIn: "never" }); 
   const [shareLink , setShareLink] = useState<string| null>(null) ;
 
   useEffect(() => {
@@ -361,7 +361,7 @@ function Dashboard({
     console.log("Generated link:", link);
 
     setNotes([...notes, data]);
-    setNewNote({ title: "", content: "", password: "" });
+    setNewNote({ title: "", content: "", password: "", expiresIn: "never" });
   } catch (err) {
     console.error("Failed to create note:", err);
     alert(err instanceof Error ? err.message : "Failed to create note");
@@ -437,6 +437,18 @@ function Dashboard({
               onChange={(e) => setNewNote({...newNote, password: e.target.value})}
               className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm transition-colors"
             />
+          </div>
+          <div>
+            <select
+              value={newNote.expiresIn}
+              onChange={(e) => setNewNote({...newNote, expiresIn: e.target.value})}
+              className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm transition-colors bg-white"
+            >
+              <option value="10m">Expires in 10 Minutes</option>
+              <option value="1h">Expires in 1 Hour</option>
+              <option value="1d">Expires in 1 Day</option>
+              <option value="never">Never Expires</option>
+            </select>
           </div>
           <button 
             onClick={createNote}
