@@ -36,7 +36,7 @@ async function apiRequest(endpoint: string, options: RequestInit = {}) {
 }
 
 export default function App() {
-  const [currentView, setCurrentView] = useState<"register" | "login" | "dashboard" | "viewNote">("login");
+  const [currentView, setCurrentView] = useState<"register" | "login" | "dashboard" | "guestDashboard" | "viewNote">("login");
   const [token, setToken] = useState<string | null>(null);
   const [user, setUser] = useState<User | null>(null);
   const [noteId, setNoteId] = useState<string | null>(null);
@@ -79,10 +79,14 @@ export default function App() {
               setCurrentView("dashboard");
             }}
             onSwitchToRegister={() => setCurrentView("register")}
+            onGuestLogin={() => setCurrentView("guestDashboard")}
           />
         )}
         {currentView === "dashboard" && (
           <Dashboard user={user} token={token} onLogout={handleLogout} />
+        )}
+        {currentView === "guestDashboard" && (
+          <GuestDashboard onLogout={handleLogout} />
         )}
         {currentView === "viewNote" && noteId && (
           <NoteViewer
@@ -204,9 +208,11 @@ function Register({
 function Login({
   onSuccess,
   onSwitchToRegister,
+  onGuestLogin,
 }: {
   onSuccess: (token: string, user: User) => void;
   onSwitchToRegister: () => void;
+  onGuestLogin: () => void;
 }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -279,7 +285,17 @@ function Login({
         </p>
       )}
 
-      <div className="text-center mt-8 pt-6 border-t border-blue-800/50">
+      <div className="mt-6">
+        <button
+          type="button"
+          onClick={onGuestLogin}
+          className="w-full py-3 rounded-lg text-blue-300 border border-blue-600/50 hover:bg-blue-800/30 hover:text-white font-semibold transition-colors"
+        >
+          Continue as Guest
+        </button>
+      </div>
+
+      <div className="text-center mt-6 pt-6 border-t border-blue-800/50">
         <button
           type="button"
           onClick={onSwitchToRegister}
@@ -459,6 +475,121 @@ function Dashboard({
             >
               {shareLink}
             </a>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function GuestDashboard({ onLogout }: { onLogout: () => void }) {
+  const [newNote, setNewNote] = useState({ title: "", content: "", password: "" }); 
+  const [shareLink , setShareLink] = useState<string| null>(null);
+  const [creating, setCreating] = useState(false);
+
+  // create note request
+  const createNote = async () => {
+    if (!newNote.title || !newNote.content || !newNote.password) return;
+    
+    setCreating(true);
+    setShareLink(null);
+
+    try {
+      const data = await apiRequest("/notes/guest", {
+        method: "POST",
+        body: JSON.stringify(newNote),
+      });
+
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const id = (data as any)._id;
+      if (!id) throw new Error("Missing ID in response");
+
+      const link = `${window.location.origin}/note/${id}`;
+      setShareLink(link);
+      setNewNote({ title: "", content: "", password: "" });
+    } catch (err) {
+      console.error("Failed to create guest note:", err);
+      alert(err instanceof Error ? err.message : "Failed to create note");
+    } finally {
+      setCreating(false);
+    }
+  };
+
+  return (
+    <div className="w-full max-w-3xl space-y-8">
+      {/* Minimal Navigation */}
+      <div className="flex justify-between items-center bg-blue-900/30 px-6 py-4 rounded-xl border border-blue-800/50 backdrop-blur-sm">
+        <div className="text-blue-100 font-medium">
+          Logged in as <span className="font-semibold text-white ml-1">Guest</span>
+        </div>
+        <button
+          onClick={onLogout}
+          className="text-sm text-blue-300 hover:text-white transition-colors"
+        >
+          Exit Guest Mode
+        </button>
+      </div>
+
+      {/* Main Create Note Area */}
+      <div className="bg-blue-900/40 p-6 sm:p-10 rounded-2xl border border-blue-800/50 shadow-2xl backdrop-blur-md text-left">
+        <h3 className="text-2xl font-medium text-white mb-2">Create Guest Note</h3>
+        <p className="text-blue-200 text-sm mb-8">Guest share links automatically expire exactly 2 minutes after creation.</p>
+        
+        <div className="space-y-6">
+          <div>
+            <label className="block text-sm font-semibold text-blue-200 mb-2">Note Title</label>
+            <input
+              value={newNote.title}
+              onChange={(e) => setNewNote({...newNote, title: e.target.value})}
+              className="w-full bg-white text-slate-900 px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition-shadow"
+              required
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-semibold text-blue-200 mb-2">Note Content</label>
+            <textarea
+              value={newNote.content}
+              onChange={(e) => setNewNote({...newNote, content: e.target.value})}
+              className="w-full bg-white text-slate-900 px-4 py-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition-shadow min-h-[220px] resize-y leading-relaxed"
+              required
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-semibold text-blue-200 mb-2">Passkey</label>
+            <input
+              type="password"
+              value={newNote.password}
+              onChange={(e) => setNewNote({...newNote, password: e.target.value})}
+              className="w-full bg-white text-slate-900 px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition-shadow"
+              required
+            />
+          </div>
+
+          <button 
+            onClick={createNote}
+            disabled={creating}
+            className={`w-full mt-4 py-3.5 rounded-lg text-white font-semibold transition-colors ${
+              creating ? "bg-blue-600/50 cursor-not-allowed" : "bg-blue-500 hover:bg-blue-400"
+            }`}
+          >
+            {creating ? "Creating..." : "Create Guest Note"}
+          </button>
+        </div>
+
+        {shareLink && (
+          <div className="mt-8 p-6 bg-white rounded-xl border border-blue-100 text-center shadow-inner">
+            <p className="text-sm font-semibold text-slate-500 mb-2">Your shareable link is ready:</p>
+            <a 
+              href={shareLink} 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-blue-600 hover:text-blue-800 break-all hover:underline font-semibold text-lg"
+            >
+              {shareLink}
+            </a>
+            <p className="mt-3 text-sm text-red-500 font-medium">Your share link expires in 2 minutes.</p>
           </div>
         )}
       </div>
