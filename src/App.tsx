@@ -478,6 +478,26 @@ function NoteViewer({
   const [loading, setLoading] = useState(false);
   const [content, setContent] = useState<NoteContent | null>(null);
 
+  const [statusLoading, setStatusLoading] = useState(true);
+  const [isExpired, setIsExpired] = useState(false);
+  const [expiredMsg, setExpiredMsg] = useState("");
+
+  useEffect(() => {
+    let isMounted = true;
+    apiRequest(`/notes/${noteId}/status`, { method: "GET" })
+      .then(() => {
+        if (isMounted) setStatusLoading(false);
+      })
+      .catch((err) => {
+        if (isMounted) {
+          setIsExpired(true);
+          setExpiredMsg(err instanceof Error ? err.message : "This link has expired and is no longer available.");
+          setStatusLoading(false);
+        }
+      });
+    return () => { isMounted = false; };
+  }, [noteId]);
+
   const verifyNote = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -498,6 +518,34 @@ function NoteViewer({
       setLoading(false);
     }
   };
+
+  if (statusLoading) {
+    return (
+      <div className="w-full max-w-md bg-blue-900/40 p-8 sm:p-10 rounded-2xl border border-blue-800/50 shadow-2xl backdrop-blur-md text-center">
+        <p className="text-blue-200">Checking link status...</p>
+      </div>
+    );
+  }
+
+  if (isExpired) {
+    return (
+      <div className="w-full max-w-md bg-blue-900/40 p-8 sm:p-10 rounded-2xl border border-blue-800/50 shadow-2xl backdrop-blur-md text-center">
+        <div className="text-blue-200 mb-6">
+          <svg className="w-16 h-16 mx-auto mb-4 text-blue-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <h2 className="text-2xl font-medium text-white mb-2">Link Unavailable</h2>
+          <p className="text-sm mt-2">{expiredMsg}</p>
+        </div>
+        <button
+          onClick={onBack}
+          className="w-full py-3 bg-blue-500 hover:bg-blue-400 text-white font-semibold rounded-lg transition-colors"
+        >
+          Go Home
+        </button>
+      </div>
+    );
+  }
 
   // State when unlocked successfully
   if (content) {
