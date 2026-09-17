@@ -380,19 +380,36 @@ function Dashboard({
     }
   };
 
+  const [dashboardView, setDashboardView] = useState<"create" | "active">("create");
+
   return (
     <div className="w-full max-w-3xl space-y-8">
       {/* Minimal Navigation */}
-      <div className="flex justify-between items-center bg-blue-900/30 px-6 py-4 rounded-xl border border-blue-800/50 backdrop-blur-sm">
+      <div className="flex flex-col sm:flex-row justify-between items-center gap-4 bg-blue-900/30 px-6 py-4 rounded-xl border border-blue-800/50 backdrop-blur-sm">
         <div className="text-blue-100 font-medium">
           Logged in as <span className="font-semibold text-white ml-1">{profile?.name || user?.name || "..."}</span>
         </div>
-        <button
-          onClick={onLogout}
-          className="text-sm text-blue-300 hover:text-white transition-colors"
-        >
-          Sign out
-        </button>
+        <div className="flex items-center gap-4">
+          <button
+            onClick={() => setDashboardView("create")}
+            className={`text-sm font-medium transition-colors ${dashboardView === "create" ? "text-white" : "text-blue-300 hover:text-white"}`}
+          >
+            Create Note
+          </button>
+          <button
+            onClick={() => setDashboardView("active")}
+            className={`text-sm font-medium transition-colors ${dashboardView === "active" ? "text-white" : "text-blue-300 hover:text-white"}`}
+          >
+            My Links
+          </button>
+          <div className="w-px h-4 bg-blue-700/50 mx-2"></div>
+          <button
+            onClick={onLogout}
+            className="text-sm text-blue-300 hover:text-red-300 transition-colors"
+          >
+            Sign out
+          </button>
+        </div>
       </div>
 
       {(loading || error) && (
@@ -402,7 +419,12 @@ function Dashboard({
         </div>
       )}
 
+      {dashboardView === "active" && (
+        <ActiveLinksList token={token} onSwitchToCreate={() => setDashboardView("create")} />
+      )}
+
       {/* Main Create Note Area */}
+      {dashboardView === "create" && (
       <div className="bg-blue-900/40 p-6 sm:p-10 rounded-2xl border border-blue-800/50 shadow-2xl backdrop-blur-md text-left">
         <h3 className="text-2xl font-medium text-white mb-8">Create Secure Note</h3>
         
@@ -490,6 +512,119 @@ function Dashboard({
           </div>
         )}
       </div>
+      )}
+    </div>
+  );
+}
+
+function ActiveLinksList({ token, onSwitchToCreate }: { token: string | null; onSwitchToCreate: () => void }) {
+  const [links, setLinks] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  const fetchLinks = async () => {
+    try {
+      setLoading(true);
+      const data = await apiRequest("/notes/active", {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setLinks(data as any[]);
+    } catch (err) {
+      setError("Failed to load active links.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchLinks();
+    const interval = setInterval(fetchLinks, 30000); // refresh every 30s
+    return () => clearInterval(interval);
+  }, [token]);
+
+  const getTimeRemaining = (expiresAt: string) => {
+    const diff = new Date(expiresAt).getTime() - Date.now();
+    if (diff <= 0) return "Expired";
+    
+    const minutes = Math.floor(diff / 60000);
+    const hours = Math.floor(minutes / 60);
+    const days = Math.floor(hours / 24);
+    
+    if (days > 0) return `Expires in ${days} day${days > 1 ? 's' : ''}`;
+    if (hours > 0) return `Expires in ${hours} hour${hours > 1 ? 's' : ''}`;
+    if (minutes > 0) return `Expires in ${minutes} minute${minutes > 1 ? 's' : ''}`;
+    return "Expires in less than a minute";
+  };
+
+  if (loading && links.length === 0) {
+    return (
+      <div className="bg-blue-900/40 p-8 rounded-2xl border border-blue-800/50 shadow-2xl backdrop-blur-md text-center">
+        <p className="text-blue-300">Loading active links...</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="bg-blue-900/40 p-8 rounded-2xl border border-blue-800/50 shadow-2xl backdrop-blur-md text-center">
+        <p className="text-red-400 mb-4">{error}</p>
+        <button onClick={fetchLinks} className="text-blue-300 hover:text-white underline">Retry</button>
+      </div>
+    );
+  }
+
+  if (links.length === 0) {
+    return (
+      <div className="bg-blue-900/40 p-12 rounded-2xl border border-blue-800/50 shadow-2xl backdrop-blur-md text-center">
+        <h3 className="text-2xl font-medium text-white mb-3">No active share links</h3>
+        <p className="text-blue-200 mb-8">Create a note to generate a shareable link.</p>
+        <button 
+          onClick={onSwitchToCreate}
+          className="px-6 py-3 bg-blue-500 hover:bg-blue-400 text-white font-semibold rounded-lg transition-colors inline-block"
+        >
+          Create Note
+        </button>
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-4">
+      {links.map((link) => {
+        const shareUrl = `${window.location.origin}/note/${link._id}`;
+        return (
+          <div key={link._id} className="bg-white p-6 rounded-xl border border-blue-100 shadow-lg flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div className="flex-1 min-w-0">
+              <h4 className="text-lg font-semibold text-slate-800 mb-1 truncate">{link.title}</h4>
+              <a 
+                href={shareUrl} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-sm text-blue-600 hover:text-blue-800 hover:underline truncate block"
+              >
+                {shareUrl}
+              </a>
+            </div>
+            <div className="flex items-center justify-between md:justify-end gap-4 shrink-0">
+              {link.expiresAt && (
+                <span className="text-sm font-medium text-slate-500 bg-slate-100 px-3 py-1 rounded-full">
+                  {getTimeRemaining(link.expiresAt)}
+                </span>
+              )}
+              <button
+                onClick={() => {
+                  navigator.clipboard.writeText(shareUrl);
+                  alert("Link copied!");
+                }}
+                className="flex items-center gap-2 px-3 py-1.5 bg-blue-50 text-blue-700 hover:bg-blue-100 border border-blue-200 rounded-lg font-medium transition-colors text-sm"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                Copy Link
+              </button>
+            </div>
+          </div>
+        );
+      })}
     </div>
   );
 }
