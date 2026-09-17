@@ -467,14 +467,26 @@ function Dashboard({
         {shareLink && (
           <div className="mt-8 p-6 bg-white rounded-xl border border-blue-100 text-center shadow-inner">
             <p className="text-sm font-semibold text-slate-500 mb-2">Your shareable link is ready:</p>
-            <a 
-              href={shareLink} 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="text-blue-600 hover:text-blue-800 break-all hover:underline font-semibold text-lg"
-            >
-              {shareLink}
-            </a>
+            <div className="flex flex-col items-center gap-3">
+              <a 
+                href={shareLink} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-blue-600 hover:text-blue-800 break-all hover:underline font-semibold text-lg"
+              >
+                {shareLink}
+              </a>
+              <button
+                onClick={() => {
+                  navigator.clipboard.writeText(shareLink);
+                  alert("Link copied to clipboard!");
+                }}
+                className="flex items-center gap-2 px-4 py-2 bg-blue-50 text-blue-700 hover:bg-blue-100 border border-blue-200 rounded-lg font-medium transition-colors text-sm"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                Copy Link
+              </button>
+            </div>
           </div>
         )}
       </div>
@@ -581,15 +593,27 @@ function GuestDashboard({ onLogout }: { onLogout: () => void }) {
         {shareLink && (
           <div className="mt-8 p-6 bg-white rounded-xl border border-blue-100 text-center shadow-inner">
             <p className="text-sm font-semibold text-slate-500 mb-2">Your shareable link is ready:</p>
-            <a 
-              href={shareLink} 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="text-blue-600 hover:text-blue-800 break-all hover:underline font-semibold text-lg"
-            >
-              {shareLink}
-            </a>
-            <p className="mt-3 text-sm text-red-500 font-medium">Your share link expires in 2 minutes.</p>
+            <div className="flex flex-col items-center gap-3">
+              <a 
+                href={shareLink} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-blue-600 hover:text-blue-800 break-all hover:underline font-semibold text-lg"
+              >
+                {shareLink}
+              </a>
+              <button
+                onClick={() => {
+                  navigator.clipboard.writeText(shareLink);
+                  alert("Link copied to clipboard!");
+                }}
+                className="flex items-center gap-2 px-4 py-2 bg-blue-50 text-blue-700 hover:bg-blue-100 border border-blue-200 rounded-lg font-medium transition-colors text-sm"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                Copy Link
+              </button>
+            </div>
+            <p className="mt-4 text-sm text-red-500 font-medium">Your share link expires in 2 minutes.</p>
           </div>
         )}
       </div>
